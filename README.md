@@ -1,24 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Learn the Presidents Game
+
+A simple Next.js web app to help you learn about US Presidents, their terms in office, and their political parties.
+
+## Features
+
+- Complete list of all 46 U.S. Presidents
+- Four difficulty levels that hide different amounts of information:
+  - Easy: Hides 1/3 of the information
+  - Medium: Hides 1/2 of the information
+  - Hard: Hides 2/3 of the information
+  - Expert: Hides almost all information
+- Timer to track your speed
+- Instant feedback on your answers
+- Responsive design with Tailwind CSS
+
+## How to Play
+
+1. Choose your difficulty level
+2. Click "Start Game" to begin
+3. Type in the missing information (terms and/or party affiliations)
+4. Correct answers will turn green
+5. Complete all blanks to finish the game
+6. Your time will be displayed when you're done
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to play the game.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+## Why This Game is Useful
+
+This application helps you memorize important historical information about U.S. Presidents in a fun, interactive way. Perfect for students, history enthusiasts, or anyone wanting to brush up on their presidential knowledge.
 
 ## Learn More
 
