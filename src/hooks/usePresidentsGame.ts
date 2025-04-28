@@ -5,7 +5,13 @@ import { presidentsData, President } from '@/data/presidents';
 
 export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
 
-export type FieldType = 'term' | 'party';
+export type FieldType = 'term' | 'party' | 'president';
+
+export interface CategorySelection {
+  president: boolean;
+  term: boolean;
+  party: boolean;
+}
 
 export interface HiddenField {
   index: number;
@@ -18,6 +24,11 @@ export interface HiddenField {
 export function usePresidentsGame() {
   const [gameActive, setGameActive] = useState(false);
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
+  const [categorySelection, setCategorySelection] = useState<CategorySelection>({
+    president: false,
+    term: true,
+    party: true,
+  });
   const [hiddenFields, setHiddenFields] = useState<HiddenField[]>([]);
   const [remainingFields, setRemainingFields] = useState(0);
   const [timer, setTimer] = useState(0);
@@ -27,12 +38,18 @@ export function usePresidentsGame() {
   
   // Start the game
   const startGame = () => {
+    // Make sure at least one category is selected
+    if (!categorySelection.president && !categorySelection.term && !categorySelection.party) {
+      alert("Please select at least one category to hide");
+      return;
+    }
+    
     setGameActive(true);
     setGameComplete(false);
     setTimer(0);
     
-    // Hide random fields based on difficulty
-    hideRandomFields();
+    // Hide fields based on selections and difficulty
+    hideSelectedFields();
     
     // Start timer
     timerIntervalRef.current = setInterval(() => {
@@ -54,8 +71,16 @@ export function usePresidentsGame() {
     }
   };
   
-  // Hide random fields based on difficulty
-  const hideRandomFields = () => {
+  // Toggle category selection
+  const toggleCategory = (category: keyof CategorySelection) => {
+    setCategorySelection(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
+  
+  // Hide fields based on user selections and difficulty
+  const hideSelectedFields = () => {
     let hidePercentage: number;
     
     switch(difficulty) {
@@ -75,12 +100,19 @@ export function usePresidentsGame() {
         hidePercentage = 0.5;
     }
     
-    // Create array of all possible fields
+    // Create array of all possible fields based on selected categories
     const allFields: { index: number; type: FieldType }[] = [];
     
     presidentsData.forEach((_, index) => {
-      allFields.push({ index, type: 'term' });
-      allFields.push({ index, type: 'party' });
+      if (categorySelection.president) {
+        allFields.push({ index, type: 'president' });
+      }
+      if (categorySelection.term) {
+        allFields.push({ index, type: 'term' });
+      }
+      if (categorySelection.party) {
+        allFields.push({ index, type: 'party' });
+      }
     });
     
     // Shuffle the array
@@ -92,10 +124,22 @@ export function usePresidentsGame() {
     
     // Create hidden fields with original values
     const newHiddenFields = fieldsToHide.map(field => {
-      const originalValue = field.type === 'term' 
-        ? presidentsData[field.index].term 
-        : presidentsData[field.index].party;
-        
+      let originalValue = '';
+      
+      switch (field.type) {
+        case 'president':
+          originalValue = presidentsData[field.index].name;
+          break;
+        case 'term':
+          originalValue = presidentsData[field.index].term;
+          break;
+        case 'party':
+          originalValue = presidentsData[field.index].party;
+          break;
+        default:
+          originalValue = '';
+      }
+      
       return {
         index: field.index,
         type: field.type,
@@ -168,6 +212,8 @@ export function usePresidentsGame() {
     gameActive,
     difficulty,
     setDifficulty,
+    categorySelection,
+    toggleCategory,
     hiddenFields,
     timer,
     formatTime,

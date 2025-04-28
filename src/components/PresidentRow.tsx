@@ -17,6 +17,11 @@ export default function PresidentRow({
   hiddenFields, 
   onAnswerChange 
 }: PresidentRowProps) {
+  // Check if president name is hidden
+  const presidentField = hiddenFields.findIndex(
+    field => field.index === index && field.type === 'president'
+  );
+  
   // Check if term is hidden
   const termField = hiddenFields.findIndex(
     field => field.index === index && field.type === 'term'
@@ -28,24 +33,42 @@ export default function PresidentRow({
   );
   
   // Refs for input elements
+  const presidentInputRef = useRef<HTMLInputElement>(null);
   const termInputRef = useRef<HTMLInputElement>(null);
   const partyInputRef = useRef<HTMLInputElement>(null);
   
   // Focus on first input if this is the first hidden field
   useEffect(() => {
     if (hiddenFields.length > 0) {
-      if (termField === 0 && termInputRef.current) {
+      if (presidentField === 0 && presidentInputRef.current) {
+        presidentInputRef.current.focus();
+      } else if (termField === 0 && termInputRef.current) {
         termInputRef.current.focus();
       } else if (partyField === 0 && partyInputRef.current) {
         partyInputRef.current.focus();
       }
     }
-  }, [hiddenFields, termField, partyField]);
+  }, [hiddenFields, presidentField, termField, partyField]);
   
   return (
     <div className="grid grid-cols-3 gap-2 mb-2 border-b border-gray-200 pb-2">
       <div className="p-2 bg-gray-50 rounded">
-        {president.name}
+        {presidentField === -1 ? (
+          president.name
+        ) : (
+          <input
+            ref={presidentInputRef}
+            type="text"
+            value={hiddenFields[presidentField].userValue}
+            onChange={(e) => onAnswerChange(presidentField, e.target.value)}
+            className={`w-full p-2 rounded border ${
+              hiddenFields[presidentField].isCorrect
+                ? 'bg-green-100 border-green-300'
+                : 'border-gray-300'
+            }`}
+            disabled={hiddenFields[presidentField].isCorrect}
+          />
+        )}
       </div>
       
       <div className="p-2 bg-gray-50 rounded">

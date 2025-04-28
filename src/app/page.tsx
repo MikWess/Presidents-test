@@ -10,6 +10,8 @@ export default function Home() {
     gameActive,
     difficulty,
     setDifficulty,
+    categorySelection,
+    toggleCategory,
     hiddenFields,
     timer,
     formatTime,
@@ -26,7 +28,7 @@ export default function Home() {
           Learn the Presidents
         </h1>
         
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-4">
           <div className="flex items-center gap-2">
             <label htmlFor="difficulty" className="font-medium">Difficulty:</label>
             <select
@@ -43,26 +45,64 @@ export default function Home() {
             </select>
           </div>
           
-          <div className="flex gap-2">
-            <button
-              onClick={startGame}
-              disabled={gameActive}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded disabled:bg-gray-400"
-            >
-              Start Game
-            </button>
-            <button
-              onClick={resetGame}
-              disabled={!gameActive && !gameComplete}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded disabled:bg-gray-400"
-            >
-              Reset
-            </button>
-          </div>
-          
           <div className="font-mono text-xl font-bold text-red-600">
             Time: {formatTime(timer)}
           </div>
+        </div>
+        
+        <div className="flex flex-wrap justify-center gap-4 mb-6 p-4 bg-gray-50 rounded-md">
+          <h2 className="w-full text-center text-lg font-medium mb-2">Select Categories to Hide:</h2>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={categorySelection.president}
+                onChange={() => toggleCategory('president')}
+                disabled={gameActive}
+                className="w-5 h-5"
+              />
+              <span>Presidents</span>
+            </label>
+            
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={categorySelection.term}
+                onChange={() => toggleCategory('term')}
+                disabled={gameActive}
+                className="w-5 h-5"
+              />
+              <span>Terms</span>
+            </label>
+            
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={categorySelection.party}
+                onChange={() => toggleCategory('party')}
+                disabled={gameActive}
+                className="w-5 h-5"
+              />
+              <span>Parties</span>
+            </label>
+          </div>
+        </div>
+        
+        <div className="flex justify-center gap-4 mb-6">
+          <button
+            onClick={startGame}
+            disabled={gameActive}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded disabled:bg-gray-400"
+          >
+            Start Game
+          </button>
+          <button
+            onClick={resetGame}
+            disabled={!gameActive && !gameComplete}
+            className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded disabled:bg-gray-400"
+          >
+            Reset
+          </button>
         </div>
         
         {gameComplete && (
