@@ -49,10 +49,23 @@ export default function PresidentRow({
 
   // Handle animation when answer is correct
   const handleChange = (fieldIndex: number, type: keyof typeof showAnimation, value: string) => {
+    if (fieldIndex === -1) return;
+    
+    const currentValue = fieldIndex !== -1 && fieldIndex < hiddenFields.length ? 
+      hiddenFields[fieldIndex].userValue : '';
+    
+    // Only trigger animation if answer changes from incorrect to correct
+    const wasPreviouslyCorrect = fieldIndex !== -1 && 
+      fieldIndex < hiddenFields.length && 
+      hiddenFields[fieldIndex].isCorrect;
+      
+    const isNowCorrect = value.toLowerCase().trim() === 
+      (fieldIndex !== -1 && fieldIndex < hiddenFields.length ? 
+        hiddenFields[fieldIndex].originalValue.toLowerCase().trim() : '');
+    
     onAnswerChange(fieldIndex, value);
     
-    const field = fieldIndex !== -1 ? hiddenFields[fieldIndex] : null;
-    if (field && value.toLowerCase() === field.originalValue.toLowerCase()) {
+    if (!wasPreviouslyCorrect && isNowCorrect) {
       setShowAnimation(prev => ({ ...prev, [type]: true }));
       setTimeout(() => {
         setShowAnimation(prev => ({ ...prev, [type]: false }));
@@ -78,6 +91,18 @@ export default function PresidentRow({
     return index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
   };
   
+  // Helper to get the current value of a field
+  const getFieldValue = (fieldIndex: number) => {
+    if (fieldIndex === -1 || fieldIndex >= hiddenFields.length) return '';
+    return hiddenFields[fieldIndex].userValue;
+  };
+  
+  // Helper to check if a field is correct
+  const isFieldCorrect = (fieldIndex: number) => {
+    if (fieldIndex === -1 || fieldIndex >= hiddenFields.length) return false;
+    return hiddenFields[fieldIndex].isCorrect;
+  };
+  
   return (
     <div className={`grid grid-cols-3 gap-0 border-b border-gray-200 ${getRowBgColor()} hover:bg-blue-50 transition-colors duration-150 ease-in-out`}>
       <div className="p-3 border-r border-gray-200">
@@ -88,15 +113,15 @@ export default function PresidentRow({
             <input
               ref={presidentInputRef}
               type="text"
-              value={hiddenFields[presidentField].userValue}
+              value={getFieldValue(presidentField)}
               onChange={(e) => handleChange(presidentField, 'president', e.target.value)}
               className={`input ${
-                hiddenFields[presidentField].isCorrect
+                isFieldCorrect(presidentField)
                   ? 'bg-green-50 border-green-300 text-green-800 font-medium'
                   : 'bg-white'
               }`}
               placeholder="Enter president name"
-              disabled={hiddenFields[presidentField].isCorrect}
+              disabled={isFieldCorrect(presidentField)}
             />
           </div>
         )}
@@ -110,15 +135,15 @@ export default function PresidentRow({
             <input
               ref={termInputRef}
               type="text"
-              value={hiddenFields[termField].userValue}
+              value={getFieldValue(termField)}
               onChange={(e) => handleChange(termField, 'term', e.target.value)}
               className={`input ${
-                hiddenFields[termField].isCorrect
+                isFieldCorrect(termField)
                   ? 'bg-green-50 border-green-300 text-green-800 font-medium'
                   : 'bg-white'
               }`}
               placeholder="Enter term years"
-              disabled={hiddenFields[termField].isCorrect}
+              disabled={isFieldCorrect(termField)}
             />
           </div>
         )}
@@ -132,15 +157,15 @@ export default function PresidentRow({
             <input
               ref={partyInputRef}
               type="text"
-              value={hiddenFields[partyField].userValue}
+              value={getFieldValue(partyField)}
               onChange={(e) => handleChange(partyField, 'party', e.target.value)}
               className={`input ${
-                hiddenFields[partyField].isCorrect
+                isFieldCorrect(partyField)
                   ? 'bg-green-50 border-green-300 text-green-800 font-medium'
                   : 'bg-white'
               }`}
               placeholder="Enter party name"
-              disabled={hiddenFields[partyField].isCorrect}
+              disabled={isFieldCorrect(partyField)}
             />
           </div>
         )}

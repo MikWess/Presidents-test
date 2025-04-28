@@ -40,61 +40,153 @@ body {
 
 /* Modern button styles */
 .btn {
-  @apply px-6 py-2.5 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 active:scale-95;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 200ms;
+  transform: translateY(0);
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.btn:active {
+  transform: scale(0.95);
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  background-color: #4b6bfb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #3451d1;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }
 
 .btn-secondary {
-  @apply bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
+  background-color: #64748b;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #475569;
+}
+
+.btn-secondary:focus {
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.5);
 }
 
 .btn-success {
-  @apply bg-green-600 text-white hover:bg-green-500 focus:ring-green-500;
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+}
+
+.btn-success:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5);
 }
 
 /* Card styles */
 .card {
-  @apply bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-xl;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+  transition: box-shadow 300ms;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Input styles */
 .input {
-  @apply w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition duration-200;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  transition: all 200ms;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  border-color: transparent;
 }
 
 /* Checkbox styles */
 .checkbox-container {
-  @apply relative flex items-center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .checkbox-container input[type="checkbox"] {
-  @apply sr-only;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .checkbox-container label {
-  @apply pl-8 cursor-pointer select-none;
+  padding-left: 2rem;
+  cursor: pointer;
+  user-select: none;
 }
 
 .checkbox-container label::before {
   content: '';
-  @apply absolute left-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded border border-gray-300 bg-white transition duration-200;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid #cbd5e1;
+  background-color: white;
+  transition: all 200ms;
 }
 
 .checkbox-container input[type="checkbox"]:checked + label::before {
-  @apply bg-blue-500 border-blue-500;
+  background-color: #4b6bfb;
+  border-color: #4b6bfb;
 }
 
 .checkbox-container label::after {
   content: '';
-  @apply absolute left-[5px] top-1/2 transform -translate-y-1/2 w-3 h-3 scale-0 transition duration-200;
+  position: absolute;
+  left: 0.3125rem;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform 200ms;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: cover;
 }
 
 .checkbox-container input[type="checkbox"]:checked + label::after {
-  @apply scale-100;
+  transform: translateY(-50%) scale(1);
 }
 
 /* Animation for correct answers */

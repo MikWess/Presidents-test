@@ -52,6 +52,10 @@ export function usePresidentsGame() {
     hideSelectedFields();
     
     // Start timer
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+    }
+    
     timerIntervalRef.current = setInterval(() => {
       setTimer(prev => prev + 1);
     }, 1000);
@@ -115,11 +119,16 @@ export function usePresidentsGame() {
       }
     });
     
+    // If no fields were added, return early
+    if (allFields.length === 0) {
+      return;
+    }
+    
     // Shuffle the array
     const shuffledFields = [...allFields].sort(() => Math.random() - 0.5);
     
     // Calculate how many fields to hide
-    const fieldsToHideCount = Math.floor(shuffledFields.length * hidePercentage);
+    const fieldsToHideCount = Math.max(1, Math.floor(shuffledFields.length * hidePercentage));
     const fieldsToHide = shuffledFields.slice(0, fieldsToHideCount);
     
     // Create hidden fields with original values
@@ -155,10 +164,15 @@ export function usePresidentsGame() {
   
   // Check the answer
   const checkAnswer = (fieldIndex: number, value: string) => {
+    if (fieldIndex < 0 || fieldIndex >= hiddenFields.length) {
+      console.error("Invalid field index:", fieldIndex);
+      return;
+    }
+    
     const updatedFields = hiddenFields.map((field, index) => {
       if (index === fieldIndex) {
-        // Check if answer is correct
-        const isCorrect = value.toLowerCase() === field.originalValue.toLowerCase();
+        // Check if answer is correct - compare ignoring case and trimming whitespace
+        const isCorrect = value.toLowerCase().trim() === field.originalValue.toLowerCase().trim();
         
         return {
           ...field,
